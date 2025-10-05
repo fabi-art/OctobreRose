@@ -12,16 +12,24 @@ import java.util.Date;
 
 
 @Entity
+@Table(name = "commentaires")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Commentaire {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idComment;
+    private Long idComment;
 
+    @NotBlank
     private String contenuComment;
-    private Date dateComment;
+
+    private Date dateComment = new Date();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id")
+    private Post post;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false) // Lien vers l'utilisateur
     private User user; // Relation avec User
