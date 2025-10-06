@@ -41,32 +41,22 @@ public class LikeController {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("Post non trouvé"));
 
-        if (likeRepository.existsByUserAndPost(user, post)) {
-            return ResponseEntity.badRequest().body("Vous avez déjà liké ce post");
+        // Vérifie si le like existe déjà
+        var existingLike = likeRepository.findByUserAndPost(user, post);
+
+        if (existingLike.isPresent()) {
+            // Déjà liké → on retire le like
+            likeRepository.delete(existingLike.get());
+            return ResponseEntity.ok(" Like retiré du post");
+        } else {
+            // Pas encore liké → on ajoute
+            Like like = new Like();
+            like.setUser(user);
+            like.setPost(post);
+            likeRepository.save(like);
+            return ResponseEntity.ok(" Post liké avec succès");
         }
 
-        Like like = new Like();
-        like.setUser(user);
-        like.setPost(post);
-        likeRepository.save(like);
-
-        return ResponseEntity.ok("Post liké avec succès !");
-    }
-
-    // Unliker un Post
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    @DeleteMapping("/post/{postId}")
-    public ResponseEntity<?> unlikePost(@PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        User user = userRepository.findById(userDetails.getId())
-                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("Post non trouvé"));
-
-        Like like = likeRepository.findByUserAndPost(user, post)
-                .orElseThrow(() -> new RuntimeException("Like non trouvé"));
-
-        likeRepository.delete(like);
-        return ResponseEntity.ok("Like retiré");
     }
 
     // Liker un Commentaire
@@ -78,32 +68,18 @@ public class LikeController {
         Commentaire commentaire = commentaireRepository.findById(commentaireId)
                 .orElseThrow(() -> new RuntimeException("Commentaire non trouvé"));
 
-        if (likeRepository.existsByUserAndCommentaire(user, commentaire)) {
-            return ResponseEntity.badRequest().body("Vous avez déjà liké ce commentaire 👍");
+        var existingLike = likeRepository.findByUserAndCommentaire(user, commentaire);
+
+        if (existingLike.isPresent()) {
+            likeRepository.delete(existingLike.get());
+            return ResponseEntity.ok(" Like retiré du commentaire");
+        } else {
+            Like like = new Like();
+            like.setUser(user);
+            like.setCommentaire(commentaire);
+            likeRepository.save(like);
+            return ResponseEntity.ok(" Commentaire liké avec succès");
         }
-
-        Like like = new Like();
-        like.setUser(user);
-        like.setCommentaire(commentaire);
-        likeRepository.save(like);
-
-        return ResponseEntity.ok("Commentaire liké avec succès !");
-    }
-
-    // Unliker un Commentaire
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    @DeleteMapping("/commentaire/{commentaireId}")
-    public ResponseEntity<?> unlikeComment(@PathVariable Long commentaireId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        User user = userRepository.findById(userDetails.getId())
-                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
-        Commentaire commentaire = commentaireRepository.findById(commentaireId)
-                .orElseThrow(() -> new RuntimeException("Commentaire non trouvé"));
-
-        Like like = likeRepository.findByUserAndCommentaire(user, commentaire)
-                .orElseThrow(() -> new RuntimeException("Like non trouvé"));
-
-        likeRepository.delete(like);
-        return ResponseEntity.ok("Like retiré");
     }
 
     // Compter les likes d’un post
