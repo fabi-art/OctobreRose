@@ -60,6 +60,31 @@ public class PostController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    // Modifier un post
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PutMapping("/{id}")
+    public ResponseEntity<Post> updatePost(
+            @PathVariable("id") Long idPost,
+            @RequestBody Post postRequest,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        Post post = postRepository.findById(idPost)
+                .orElseThrow(() -> new RuntimeException("Post non trouvé"));
+
+        // Vérifier que l'utilisateur est bien le propriétaire du post
+        if (!post.getUser().getId().equals(userDetails.getId())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        // Mettre à jour le contenu du post
+        post.setContenuPost(postRequest.getContenuPost());
+        post.setDatePost(new java.util.Date()); // optionnel : mettre à jour la date
+
+        Post updatedPost = postRepository.save(post);
+        return ResponseEntity.ok(updatedPost);
+    }
+
+
     //Supprimer un post
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @DeleteMapping("/{id}")
