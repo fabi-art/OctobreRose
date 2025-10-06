@@ -70,4 +70,46 @@ public class CommentaireController {
         return commentaireRepository.findByPostId(postId);
     }
 
+
+    // Modifier un commentaire
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PutMapping("/{commentId}")
+    public ResponseEntity<?> updateComment(
+            @PathVariable Long commentId,
+            @RequestBody Commentaire commentaireDetails,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        Commentaire commentaire = commentaireRepository.findById(commentId)
+                .orElseThrow(() -> new RuntimeException("Commentaire non trouvé"));
+
+        // Vérifier que l'utilisateur est l'auteur du commentaire
+        if (!commentaire.getUser().getId().equals(userDetails.getId())) {
+            return ResponseEntity.status(403).body("Vous ne pouvez pas modifier ce commentaire");
+        }
+
+        commentaire.setContenu(commentaireDetails.getContenu());
+        commentaireRepository.save(commentaire);
+
+        return ResponseEntity.ok(commentaire);
+    }
+
+    // Supprimer un commentaire
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<?> deleteComment(
+            @PathVariable Long commentId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        Commentaire commentaire = commentaireRepository.findById(commentId)
+                .orElseThrow(() -> new RuntimeException("Commentaire non trouvé"));
+
+        // Vérifier que l'utilisateur est l'auteur du commentaire ou un admin
+        if (!commentaire.getUser().getId().equals(userDetails.getId())) {
+            return ResponseEntity.status(403).body("Vous ne pouvez pas supprimer ce commentaire");
+        }
+
+        commentaireRepository.delete(commentaire);
+        return ResponseEntity.noContent().build();
+    }
+
 }
