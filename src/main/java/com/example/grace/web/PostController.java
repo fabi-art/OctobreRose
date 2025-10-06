@@ -1,19 +1,25 @@
 package com.example.grace.web;
 
+import com.example.grace.entities.Post;
 import com.example.grace.entities.Role;
 import com.example.grace.entities.User;
 import com.example.grace.payload.request.LoginRequest;
 import com.example.grace.payload.request.SignupRequest;
 import com.example.grace.payload.response.JwtResponse;
 import com.example.grace.payload.response.MessageResponse;
+import com.example.grace.repositories.PostRepository;
+import com.example.grace.repositories.UserRepository;
 import com.example.grace.services.AuthService;
+import com.example.grace.services.UserDetailsImpl;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,28 +33,39 @@ public class PostController {
     @Autowired
     private PostRepository postRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    // Creer un post
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<Post> createPost(@RequestBody Post post, @AuthenticationPrincipal User user) {
+    public ResponseEntity<Post> createPost(@RequestBody Post post, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        User user = userRepository.findById(userDetails.getId()).orElseThrow();
         post.setUser(user);
         return ResponseEntity.ok(postRepository.save(post));
     }
 
+
+    //Liste des post
     @GetMapping
     public List<Post> getAllPosts() {
         return postRepository.findAll();
     }
 
+    // Recuperer un post
     @GetMapping("/{id}")
-    public ResponseEntity<Post> getPostById(@PathVariable Long id) {
-        return postRepository.findById(id)
+    public ResponseEntity<Post> getPostById(@PathVariable("id") Long idPost) {
+        return postRepository.findById(idPost)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    //Supprimer un post
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePost(@PathVariable Long id, @AuthenticationPrincipal User user) {
-        Post post = postRepository.findById(id).orElseThrow();
-        if (!post.getUser().getId().equals(user.getId())) {
+    public ResponseEntity<Void> deletePost(@PathVariable("id") Long idPost, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        Post post = postRepository.findById(idPost).orElseThrow();
+        if (!post.getUser().getId().equals(userDetails.getId())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         postRepository.delete(post);

@@ -8,6 +8,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 
 @Entity
@@ -18,9 +19,9 @@ import java.util.Date;
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long idPost;
+    private long id;
 
-    private String contenu;
+    private String contenuPost;
 
     private Date datePost = new Date();
 
@@ -30,5 +31,26 @@ public class Post {
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Commentaire> commentaire= new ArrayList<>(); // Ajout de la relation
+
+    public Post(String contenuPost, Date datePost, User user) {
+        this.contenuPost = contenuPost;
+        this.datePost = datePost;
+        this.user = user;
+    }
+
+    // Getters et setters
+    public Long getIdPost() { return id; }
+    public void setIdPost(Long idPost) { this.id = id; }
+
+    public String getContenuPost() { return contenuPost; }
+    public void setContenuPost(String contenuPost) { this.contenuPost = contenuPost; }
+
+    public Date getDatePost() { return datePost; }
+    public void setDatePost(Date datePost) { this.datePost = datePost; }
+
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
+
+
 
 }

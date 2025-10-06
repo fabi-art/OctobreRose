@@ -1,12 +1,18 @@
 package com.example.grace.web;
 
+import com.example.grace.entities.Commentaire;
+import com.example.grace.entities.Post;
 import com.example.grace.entities.Role;
 import com.example.grace.entities.User;
 import com.example.grace.payload.request.LoginRequest;
 import com.example.grace.payload.request.SignupRequest;
 import com.example.grace.payload.response.JwtResponse;
 import com.example.grace.payload.response.MessageResponse;
+import com.example.grace.repositories.CommentaireRepository;
+import com.example.grace.repositories.PostRepository;
+import com.example.grace.repositories.UserRepository;
 import com.example.grace.services.AuthService;
+import com.example.grace.services.UserDetailsImpl;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,15 +34,40 @@ public class CommentaireController {
     @Autowired
     private CommentaireRepository commentaireRepository;
 
+    @Autowired
+    private PostRepository postRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    // Ajouter un commentaire à un post
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PostMapping("/{postId}")
-    public ResponseEntity<Commentaire> addComment(@PathVariable Long postId, @RequestBody Commentaire commentaire, @AuthenticationPrincipal User user) {
+    public ResponseEntity<?> addComment(
+            @PathVariable Long postId,
+            @RequestBody Commentaire commentaire,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        // Vérifier que le post existe
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("Post non trouvé"));
+
+        // Vérifier que l'utilisateur existe
+        User user = userRepository.findById(userDetails.getId())
+                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+
+        // Associer le commentaire à l'utilisateur connecté et au post
         commentaire.setUser(user);
-        commentaire.setPost(new Post(postId));
-        return ResponseEntity.ok(commentaireRepository.save(commentaire));
+        commentaire.setPost(post);
+
+        Commentaire saved = commentaireRepository.save(commentaire);
+        return ResponseEntity.ok(saved);
     }
 
+    // Récupérer les commentaires d’un post
     @GetMapping("/post/{postId}")
     public List<Commentaire> getCommentsByPost(@PathVariable Long postId) {
         return commentaireRepository.findByPostId(postId);
     }
+
 }
