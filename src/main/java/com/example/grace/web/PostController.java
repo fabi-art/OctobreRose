@@ -78,8 +78,6 @@ public class PostController {
 
         // Mettre à jour le contenu du post
         post.setContenuPost(postRequest.getContenuPost());
-        post.setDatePost(new java.util.Date()); // optionnel : mettre à jour la date
-
         Post updatedPost = postRepository.save(post);
         return ResponseEntity.ok(updatedPost);
     }

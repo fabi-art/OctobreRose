@@ -26,5 +26,8 @@ public interface LikeRepository extends JpaRepository<Like, Long> {
 
     long countByCommentaire(Commentaire commentaire);
 
+    void deleteByPost(Post post);
+    void deleteByCommentaire(Commentaire commentaire);
+
 
 }
