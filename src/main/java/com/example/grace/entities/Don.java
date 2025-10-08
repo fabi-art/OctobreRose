@@ -21,13 +21,21 @@ public class Don {
     private Long id;
 
     private Double montant;
-    private Date dateDon;
-    private String typeDon;
-    private String telephoneDon;
+    private String nomDonateur; // facultatif
+    private String email; // facultatif
+    private String telephoneDon; // facultatif
+    private boolean anonyme = false;
+    private boolean paiementEffectue = false;
+    private Date dateDon = new Date();
     private String paysDon;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false) // Lien vers l'utilisateur
-    private User user; // Relation avec User
+
+    @ManyToOne
+    @JoinColumn(name = "campagne_id")
+    private Campagne campagne; // 🔥 C’est ce champ que Campagne attend dans mappedBy="campagne"
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = true)
+    private User user; // si l’utilisateur est connecté
 
 
 }
