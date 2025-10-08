@@ -17,7 +17,7 @@ public class CampagneController {
     @Autowired
     private CampagneRepository campagneRepository;
 
-    // 🧑‍💼 ADMIN crée une campagne
+    // ADMIN crée une campagne
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<?> createCampagne(@RequestBody Campagne campagne) {
@@ -30,7 +30,7 @@ public class CampagneController {
         return ResponseEntity.ok(campagneRepository.findAll());
     }
 
-    // 👀 Voir une campagne en détail
+    // Voir une campagne en détail
     @GetMapping("/{id}")
     public ResponseEntity<Campagne> getCampagne(@PathVariable Long id) {
         return campagneRepository.findById(id)
