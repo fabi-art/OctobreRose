@@ -18,6 +18,11 @@ public class SignupRequest {
     @Size(min = 2, max = 50)
     private String nom;
 
+
+    @NotBlank
+    @Size(min = 2, max = 50)
+    private String ville;
+
     @NotBlank
     @Size(min = 6, max = 20)
     private String telephone;
@@ -83,6 +88,9 @@ public class SignupRequest {
     // Ajoute les getters et setters
     public String getNom() { return nom; }
     public void setNom(String nom) { this.nom = nom; }
+
+    public String getVille() { return ville; }
+    public void setVille(String ville) { this.ville = ville; }
 
     public String getTelephone() { return telephone; }
     public void setTelephone(String telephone) { this.telephone = telephone; }

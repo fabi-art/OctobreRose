@@ -38,6 +38,12 @@ public class User {
 	private String nom;
 
 
+	@NotBlank(message = "Ville is mandatory")
+	@Size(max = 50, message = "Ville must be less than or equal to 50 characters")
+	@Email(message = "Ville should be valid")
+	@Column(length = 50, unique = true, nullable = false)
+	private String ville;
+
 
 	@ValidPassword
 	@NotBlank(message = "Password is mandatory")
@@ -115,14 +121,18 @@ public class User {
 	private Collection<Commentaire> commentaire= new ArrayList<>(); // Ajout de la relation
 
 
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+	private Collection<CentreSante> centreSante= new ArrayList<>(); // Ajout de la relation
+
 	public User() {
 	}
 
-	public User(String pseudo, String nom,String email,String telephone, String password) {
+	public User(String pseudo, String nom,String email,String telephone,String ville, String password) {
 		this.pseudo = pseudo;
 		this.nom = nom;
 		this.email= email;
 		this.telephone=telephone;
+		this.ville=ville;
 		this.password = password;
 	}
 
@@ -158,6 +168,16 @@ public class User {
 	public void setNom(String nom) {
 		this.nom = nom;
 	}
+
+
+	public String getVille() {
+		return ville;
+	}
+
+	public void setVille(String ville) {
+		this.ville = ville;
+	}
+
 
 	public String getEmail() {
 		return email;

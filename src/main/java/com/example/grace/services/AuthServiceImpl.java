@@ -127,9 +127,9 @@ public class AuthServiceImpl implements AuthService {
                 signUpRequest.getNom(),
                 signUpRequest.getEmail(),
                 signUpRequest.getTelephone(),
+                signUpRequest.getVille(),
                 encoder.encode(signUpRequest.getPassword())  // <-- encoder ici !
         );
-
 
 
 
@@ -249,7 +249,10 @@ public class AuthServiceImpl implements AuthService {
 
         // Mise à jour du nom d'utilisateur et de l'email
         existingUser.setPseudo(updateRequest.getPseudo());
+        existingUser.setNom(updateRequest.getNom());
         existingUser.setEmail(updateRequest.getEmail());
+        existingUser.setTelephone(updateRequest.getTelephone());
+        existingUser.setVille(updateRequest.getVille());
 
         // Récupération des rôles sous forme de String
         Set<String> strRoles = updateRequest.getRole();

@@ -22,11 +22,12 @@ public class CentreSante {
     private String ville;
     private String pays;
     private String telephone;
-    private String email;
     private String coordonneeCentre;
 
     @OneToMany(mappedBy = "centreSante", fetch = FetchType.LAZY)
     private Collection<Annonce> annonce= new ArrayList<>(); // Ajout de la relation
 
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false) // Lien vers l'utilisateur
+    private User user; // Relation avec User
 }

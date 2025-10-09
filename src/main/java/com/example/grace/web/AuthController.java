@@ -35,6 +35,12 @@ public class AuthController {
 
 	private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
+	@PostMapping("/signup")
+	public ResponseEntity<MessageResponse> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+		MessageResponse response = authService.registerUser(signUpRequest);
+		return ResponseEntity.ok(response);
+	}
+
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 		JwtResponse jwtResponse = authService.authenticateUser(loginRequest);
@@ -46,29 +52,14 @@ public class AuthController {
 		return ResponseEntity.ok(response);
 	}
 
-	/*@PostMapping("/signup")
-	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-		MessageResponse messageResponse = authService.registerUser(signUpRequest);
-		if (messageResponse.getMessage().startsWith("Error")) {
-			return ResponseEntity.badRequest().body(messageResponse);
-		}
-		return ResponseEntity.ok(messageResponse);
-	}*/
-
-	/*// Endpoint pour lister tous les utilisateurs
-	@GetMapping("/users")
-	public ResponseEntity<List<User>> listUsers() {
-		List<User> users = authService.listUsers();
-		return ResponseEntity.ok(users);
-	}
-
-
+//	@PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
 	@GetMapping("/users/{id}")
 	public ResponseEntity<User> getUserById(@PathVariable Long id) {
 		User user = authService.getUserById(id);
 		return ResponseEntity.ok(user); // Retourne l'utilisateur trouvé
 	}
 
+//	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PutMapping("/users/update/{id}")
 	public ResponseEntity<?> updateUser(@PathVariable Long id, @Valid @RequestBody SignupRequest updateRequest) {
 		MessageResponse messageResponse = authService.updateUser(id, updateRequest);
@@ -78,15 +69,16 @@ public class AuthController {
 		return ResponseEntity.ok(messageResponse);
 	}
 
-	// Endpoint pour supprimer un utilisateur
-	@DeleteMapping("/users/delete/{id}")
-	public ResponseEntity<?> deleteUser(@PathVariable Long id) {
-		MessageResponse messageResponse = authService.deleteUser(id);
+
+//	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PutMapping("/users/update/p/{id}")
+	public ResponseEntity<?> profilUser(@PathVariable Long id, @Valid @RequestBody SignupRequest updateRequest) {
+		MessageResponse messageResponse = authService.updateProfil(id, updateRequest);
 		if (messageResponse.getMessage().startsWith("Error")) {
 			return ResponseEntity.badRequest().body(messageResponse);
 		}
 		return ResponseEntity.ok(messageResponse);
-	}*/
+	}
 }
 
 
