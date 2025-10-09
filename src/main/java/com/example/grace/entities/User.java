@@ -96,6 +96,7 @@ public class User {
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
 	private List<Annonce> annonce = new ArrayList<>(); // Ajout de la relation
 
+
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
 	private Collection<Don> don = new ArrayList<>(); // Ajout de la relation
 
@@ -127,7 +128,33 @@ public class User {
 	public User() {
 	}
 
+
+
+//	private Collection<FAQ> faq = new ArrayList<>(); // Ajout de la relation
+//
+//	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+//	private Collection<Post> post = new ArrayList<>(); // Ajout de la relation
+//
+//	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+//	private Collection<Temoignage> temoignage = new ArrayList<>(); // Ajout de la relation
+//
+//	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+//	private Collection<Tutoriel> tutoriel = new ArrayList<>(); // Ajout de la relation
+//
+//	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+//	private Collection<Evenement> evenement = new ArrayList<>(); // Ajout de la relation
+//
+//	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+//	private Collection<MiniJeuEducatif> mininJeuEducatif= new ArrayList<>(); // Ajout de la relation
+//
+//	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+//	private Collection<Commentaire> commentaire= new ArrayList<>(); // Ajout de la relation
+
+
+
+
 	public User(String pseudo, String nom,String email,String telephone,String ville, String password) {
+
 		this.pseudo = pseudo;
 		this.nom = nom;
 		this.email= email;
@@ -179,6 +206,7 @@ public class User {
 	}
 
 
+
 	public String getEmail() {
 		return email;
 	}
@@ -211,9 +239,6 @@ public class User {
 	public void setFirstLogin(boolean firstLogin) {
 		this.firstLogin = firstLogin;
 	}
-
-
-
 
 
 }

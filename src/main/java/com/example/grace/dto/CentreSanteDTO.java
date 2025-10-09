@@ -1,9 +1,7 @@
 package com.example.grace.dto;
 
-import com.example.grace.entities.Annonce;
 import com.example.grace.entities.CentreSante;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToMany;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,3 +32,4 @@ public class CentreSanteDTO {
 
     }
 }
+

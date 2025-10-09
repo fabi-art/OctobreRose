@@ -8,8 +8,6 @@ import jakarta.validation.constraints.Size;
 import java.util.List;
 import java.util.Set;
 
-
-
 public class SignupRequest {
     @NotBlank
     @Size(min = 3, max = 20)
@@ -17,7 +15,6 @@ public class SignupRequest {
     @NotBlank
     @Size(min = 2, max = 50)
     private String nom;
-
 
     @NotBlank
     @Size(min = 2, max = 50)
@@ -91,6 +88,7 @@ public class SignupRequest {
 
     public String getVille() { return ville; }
     public void setVille(String ville) { this.ville = ville; }
+
 
     public String getTelephone() { return telephone; }
     public void setTelephone(String telephone) { this.telephone = telephone; }

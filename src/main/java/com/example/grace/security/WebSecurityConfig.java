@@ -66,8 +66,12 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/api/admin/**").permitAll()
+<<<<<<< HEAD
                 .requestMatchers("/api/campagnes/**").permitAll()
                 .requestMatchers("/api/dons/campagne/**").permitAll()
+=======
+
+>>>>>>> origin/dev-anita
                 .anyRequest().authenticated();
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
@@ -78,9 +82,12 @@ public class WebSecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> origin/dev-anita
 }
 
 

@@ -30,7 +30,21 @@ public class AdminController {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
+    /*@PreAuthorize("hasRole('ROLE_ADMIN')")*/
+//    @PostMapping("/signup")
+//    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+//        MessageResponse messageResponse = authService.registerUser(signUpRequest);
+//        if (messageResponse.getMessage().startsWith("Error")) {
+//            return ResponseEntity.badRequest().body(messageResponse);
+//        }
+//        return ResponseEntity.ok(messageResponse);
+//    }
 
+    @PostMapping("/signup")
+    public ResponseEntity<MessageResponse> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+        MessageResponse response = authService.registerUser(signUpRequest);
+        return ResponseEntity.ok(response);
+    }
 
     // Endpoint pour lister tous les utilisateurs
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -56,6 +70,33 @@ public class AdminController {
     }
 
 
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+    @GetMapping("/users/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+        User user = authService.getUserById(id);
+        return ResponseEntity.ok(user); // Retourne l'utilisateur trouvé
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping("/users/update/{id}")
+    public ResponseEntity<?> updateUser(@PathVariable Long id, @Valid @RequestBody SignupRequest updateRequest) {
+        MessageResponse messageResponse = authService.updateUser(id, updateRequest);
+        if (messageResponse.getMessage().startsWith("Error")) {
+            return ResponseEntity.badRequest().body(messageResponse);
+        }
+        return ResponseEntity.ok(messageResponse);
+    }
+
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping("/users/update/p/{id}")
+    public ResponseEntity<?> profilUser(@PathVariable Long id, @Valid @RequestBody SignupRequest updateRequest) {
+        MessageResponse messageResponse = authService.updateProfil(id, updateRequest);
+        if (messageResponse.getMessage().startsWith("Error")) {
+            return ResponseEntity.badRequest().body(messageResponse);
+        }
+        return ResponseEntity.ok(messageResponse);
+    }
 
 
     // Endpoint pour supprimer un utilisateur
