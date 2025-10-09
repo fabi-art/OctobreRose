@@ -94,31 +94,31 @@ public class User {
 	private Set<Role> roles = new HashSet<>();
 
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-	private Collection<Annonce> annonce = new ArrayList<>(); // Ajout de la relation
+	private List<Annonce> annonce = new ArrayList<>(); // Ajout de la relation
 
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
 	private Collection<Don> don = new ArrayList<>(); // Ajout de la relation
 
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-	private Collection<FAQ> faq = new ArrayList<>(); // Ajout de la relation
+	private List<FAQ> faq = new ArrayList<>(); // Ajout de la relation
 
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-	private Collection<Post> post = new ArrayList<>(); // Ajout de la relation
+	private List<Post> post = new ArrayList<>(); // Ajout de la relation
 
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-	private Collection<Temoignage> temoignage = new ArrayList<>(); // Ajout de la relation
+	private List<Temoignage> temoignage = new ArrayList<>(); // Ajout de la relation
 
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-	private Collection<Tutoriel> tutoriel = new ArrayList<>(); // Ajout de la relation
+	private List<Tutoriel> tutoriel = new ArrayList<>(); // Ajout de la relation
 
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-	private Collection<Evenement> evenement = new ArrayList<>(); // Ajout de la relation
+	private List<Evenement> evenement = new ArrayList<>(); // Ajout de la relation
 
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-	private Collection<MiniJeuEducatif> mininJeuEducatif= new ArrayList<>(); // Ajout de la relation
+	private List<MiniJeuEducatif> mininJeuEducatif= new ArrayList<>(); // Ajout de la relation
 
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-	private Collection<Commentaire> commentaire= new ArrayList<>(); // Ajout de la relation
+	private List<Commentaire> commentaire= new ArrayList<>(); // Ajout de la relation
 
 
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
