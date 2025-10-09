@@ -9,12 +9,19 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
 
     @Value("${file.upload-dir:uploads/temoignages}")
-    private String uploadDir;
+    private String temoignageUploadDir;
+
+    @Value("${file.tutoriel-upload-dir:uploads/tutoriels}")
+    private String tutorielUploadDir;
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // Permettre l'accès aux fichiers uploadés via URL
+        // Permettre l'accès aux fichiers témoignages uploadés via URL
         registry.addResourceHandler("/uploads/temoignages/**")
-                .addResourceLocations("file:" + uploadDir + "/");
+                .addResourceLocations("file:" + temoignageUploadDir + "/");
+
+        // Permettre l'accès aux vidéos tutoriels uploadées via URL
+        registry.addResourceHandler("/uploads/tutoriels/**")
+                .addResourceLocations("file:" + tutorielUploadDir + "/");
     }
 }

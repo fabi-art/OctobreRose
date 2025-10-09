@@ -15,9 +15,22 @@ import java.util.UUID;
 public class FileStorageService {
 
     @Value("${file.upload-dir:uploads/temoignages}")
-    private String uploadDir;
+    private String temoignageUploadDir;
 
+    @Value("${file.tutoriel-upload-dir:uploads/tutoriels}")
+    private String tutorielUploadDir;
+
+    // Stocker un fichier de témoignage
     public String storeFile(MultipartFile file) {
+        return storeFile(file, temoignageUploadDir, "/uploads/temoignages/");
+    }
+
+    // Stocker une vidéo de tutoriel
+    public String storeTutorielVideo(MultipartFile file) {
+        return storeFile(file, tutorielUploadDir, "/uploads/tutoriels/");
+    }
+
+    private String storeFile(MultipartFile file, String uploadDir, String urlPrefix) {
         try {
             // Créer le dossier s'il n'existe pas
             Path uploadPath = Paths.get(uploadDir);
@@ -34,7 +47,7 @@ public class FileStorageService {
             Path targetLocation = uploadPath.resolve(newFilename);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
-            return "/uploads/temoignages/" + newFilename;
+            return urlPrefix + newFilename;
         } catch (IOException ex) {
             throw new RuntimeException("Impossible de stocker le fichier. Erreur: " + ex.getMessage());
         }
@@ -44,6 +57,12 @@ public class FileStorageService {
         try {
             if (fileUrl != null && !fileUrl.isEmpty()) {
                 String filename = fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
+                
+                // Déterminer le dossier en fonction de l'URL
+                String uploadDir = fileUrl.contains("/temoignages/") 
+                    ? temoignageUploadDir 
+                    : tutorielUploadDir;
+                
                 Path filePath = Paths.get(uploadDir).resolve(filename);
                 Files.deleteIfExists(filePath);
             }
