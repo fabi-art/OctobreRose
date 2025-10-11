@@ -1,5 +1,6 @@
 package com.example.grace.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.util.Date;
@@ -23,6 +24,7 @@ public class Campagne {
     private String imageUrl; // optionnelle
 
     @OneToMany(mappedBy = "campagne", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Don> dons;
 
     public Long getId() {
