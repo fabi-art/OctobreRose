@@ -1,4 +1,5 @@
 package com.example.grace.entities;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -27,9 +28,11 @@ public class Post {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false) // Lien vers l'utilisateur
+    @JsonManagedReference
     private User user; // Relation avec User
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Commentaire> commentaire= new ArrayList<>(); // Ajout de la relation
 
     public Post(String contenuPost, Date datePost, User user) {

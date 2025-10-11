@@ -1,5 +1,6 @@
 package com.example.grace.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,16 +22,19 @@ public class Signalement {
     // L’utilisateur qui signale
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonManagedReference
     private User user;
 
     // Le post signalé
     @ManyToOne
     @JoinColumn(name = "post_id")
+    @JsonManagedReference
     private Post post;
 
     // Le commentaire signalé
     @ManyToOne
     @JoinColumn(name = "commentaire_id")
+    @JsonManagedReference
     private Commentaire commentaire;
 
     // Motif du signalement

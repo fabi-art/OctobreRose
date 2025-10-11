@@ -31,10 +31,12 @@ public class Don {
 
     @ManyToOne
     @JoinColumn(name = "campagne_id")
+    @JsonManagedReference
     private Campagne campagne; // 🔥 C’est ce champ que Campagne attend dans mappedBy="campagne"
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = true)
+    @JsonManagedReference
     private User user; // si l’utilisateur est connecté
 
     public Long getId() {

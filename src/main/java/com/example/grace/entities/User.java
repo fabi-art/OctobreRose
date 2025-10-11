@@ -2,7 +2,9 @@ package com.example.grace.entities;
 
 
 import com.example.grace.validation.ValidPassword;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -85,33 +87,43 @@ public class User {
 	@JoinTable(	name = "user_roles",
 				joinColumns = @JoinColumn(name = "user_id"),
 				inverseJoinColumns = @JoinColumn(name = "role_id"))
+	@JsonManagedReference
 	private Set<Role> roles = new HashSet<>();
 
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+	@JsonManagedReference
 	private List<Annonce> annonce = new ArrayList<>(); // Ajout de la relation
 
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+	@JsonManagedReference
 	private Collection<Don> don = new ArrayList<>(); // Ajout de la relation
 
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+	@JsonManagedReference
 	private List<FAQ> faq = new ArrayList<>(); // Ajout de la relation
 
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+	@JsonManagedReference
 	private List<Post> post = new ArrayList<>(); // Ajout de la relation
 
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+	@JsonManagedReference
 	private List<Temoignage> temoignage = new ArrayList<>(); // Ajout de la relation
 
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+	@JsonManagedReference
 	private List<Tutoriel> tutoriel = new ArrayList<>(); // Ajout de la relation
 
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+	@JsonManagedReference
 	private List<Evenement> evenement = new ArrayList<>(); // Ajout de la relation
 
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+	@JsonManagedReference
 	private List<MiniJeuEducatif> mininJeuEducatif= new ArrayList<>(); // Ajout de la relation
 
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+	@JsonManagedReference
 	private List<Commentaire> commentaire= new ArrayList<>(); // Ajout de la relation
 
 
