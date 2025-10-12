@@ -1,5 +1,6 @@
 package com.example.grace.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,16 +22,19 @@ public class Like {
     // L'utilisateur qui a liké
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonManagedReference
     private User user;
 
     // Le post liké (nullable si c'est un commentaire)
     @ManyToOne
     @JoinColumn(name = "post_id")
+    @JsonManagedReference
     private Post post;
 
     // Le commentaire liké (nullable si c'est un post)
     @ManyToOne
     @JoinColumn(name = "commentaire_id")
+    @JsonManagedReference
     private Commentaire commentaire;
 
     private Date dateLike = new Date();

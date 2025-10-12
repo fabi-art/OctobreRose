@@ -29,10 +29,12 @@ public class Commentaire {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
+    @JsonManagedReference
     private Post post;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false) // Lien vers l'utilisateur
+    @JsonManagedReference
     private User user; // Relation avec User
 
 
