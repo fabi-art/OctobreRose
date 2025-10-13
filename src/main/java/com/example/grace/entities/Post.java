@@ -28,11 +28,11 @@ public class Post {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false) // Lien vers l'utilisateur
-    @JsonManagedReference
+    @JsonIgnore
     private User user; // Relation avec User
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonIgnore
     private List<Commentaire> commentaire= new ArrayList<>(); // Ajout de la relation
 
     public Post(String contenuPost, Date datePost, User user) {
@@ -42,8 +42,8 @@ public class Post {
     }
 
     // Getters et setters
-    public Long getIdPost() { return id; }
-    public void setIdPost(Long idPost) { this.id = id; }
+    public Long getId() { return id; }
+    public void setId(Long idPost) { this.id = id; }
 
     public String getContenuPost() { return contenuPost; }
     public void setContenuPost(String contenuPost) { this.contenuPost = contenuPost; }

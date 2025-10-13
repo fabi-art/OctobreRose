@@ -1,5 +1,9 @@
 package com.example.grace.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 
 public class FAQDTO {
     private Long id;

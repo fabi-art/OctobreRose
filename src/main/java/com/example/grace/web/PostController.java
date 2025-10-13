@@ -1,5 +1,6 @@
 package com.example.grace.web;
 
+import com.example.grace.dto.PostMapper;
 import com.example.grace.entities.Post;
 import com.example.grace.entities.Role;
 import com.example.grace.entities.User;
@@ -36,8 +37,11 @@ public class PostController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PostMapper postMapper;
+
     // Creer un post
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity<Post> createPost(@RequestBody Post post, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User user = userRepository.findById(userDetails.getId()).orElseThrow();
@@ -61,7 +65,7 @@ public class PostController {
     }
 
     // Modifier un post
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<Post> updatePost(
             @PathVariable("id") Long idPost,
@@ -84,7 +88,7 @@ public class PostController {
 
 
     //Supprimer un post
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePost(@PathVariable("id") Long idPost, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         Post post = postRepository.findById(idPost).orElseThrow();
