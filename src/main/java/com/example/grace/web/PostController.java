@@ -1,5 +1,6 @@
 package com.example.grace.web;
 
+import com.example.grace.dto.PostDTO;
 import com.example.grace.dto.PostMapper;
 import com.example.grace.entities.Post;
 import com.example.grace.entities.Role;
@@ -11,6 +12,7 @@ import com.example.grace.payload.response.MessageResponse;
 import com.example.grace.repositories.PostRepository;
 import com.example.grace.repositories.UserRepository;
 import com.example.grace.services.AuthService;
+import com.example.grace.services.PostService;
 import com.example.grace.services.UserDetailsImpl;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -24,6 +26,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -40,6 +43,9 @@ public class PostController {
     @Autowired
     private PostMapper postMapper;
 
+    @Autowired
+    private PostService postService;
+
     // Creer un post
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @PostMapping
@@ -52,9 +58,12 @@ public class PostController {
 
     //Liste des post
     @GetMapping
-    public List<Post> getAllPosts() {
-        return postRepository.findAll();
+    public Page<PostDTO> getAllPosts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "4") int size) {
+        return postService.getAllPostDTO(page, size);
     }
+
 
     // Recuperer un post
     @GetMapping("/{id}")
@@ -97,5 +106,10 @@ public class PostController {
         }
         postRepository.delete(post);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/recent")
+    public List<PostDTO> getRecentPosts() {
+        return postService.getRecentPostDTOs(3); // renvoie les 5 derniers
     }
 }

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class PostMapper {
 
     public PostDTO toDTO(Post post) {
-        PostDTO dto = new PostDTO();
+        PostDTO dto = new PostDTO(post);
         dto.setId(post.getId());
         dto.setContenuPost(post.getContenuPost());
         dto.setDatePost(post.getDatePost());

@@ -1,5 +1,6 @@
 package com.example.grace.web;
 
+import com.example.grace.dto.CommentaireDTO;
 import com.example.grace.entities.Commentaire;
 import com.example.grace.entities.Post;
 import com.example.grace.entities.Role;
@@ -12,6 +13,7 @@ import com.example.grace.repositories.CommentaireRepository;
 import com.example.grace.repositories.PostRepository;
 import com.example.grace.repositories.UserRepository;
 import com.example.grace.services.AuthService;
+import com.example.grace.services.CommentaireService;
 import com.example.grace.services.UserDetailsImpl;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -34,18 +36,25 @@ public class CommentaireController {
     @Autowired
     private CommentaireRepository commentaireRepository;
 
+
+    private  final CommentaireService commentaireService;
+
     @Autowired
     private PostRepository postRepository;
 
     @Autowired
     private UserRepository userRepository;
 
+    public CommentaireController(CommentaireService commentaireService) {
+        this.commentaireService = commentaireService;
+    }
+
     // Ajouter un commentaire à un post
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PostMapping("/{postId}")
-    public ResponseEntity<?> addComment(
+    public CommentaireDTO addComment(
             @PathVariable Long postId,
-            @RequestBody Commentaire commentaire,
+            @RequestBody CommentaireDTO  commentaireDTO,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         // Vérifier que le post existe
@@ -56,18 +65,18 @@ public class CommentaireController {
         User user = userRepository.findById(userDetails.getId())
                 .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
 
-        // Associer le commentaire à l'utilisateur connecté et au post
-        commentaire.setUser(user);
+        // Créer l'entité commentaire
+        Commentaire commentaire = new Commentaire();
+        commentaire.setContenu(commentaireDTO.getContenuComment());
         commentaire.setPost(post);
+        commentaire.setUser(user);
 
-        Commentaire saved = commentaireRepository.save(commentaire);
-        return ResponseEntity.ok(saved);
-    }
+        return commentaireService.saveComment(commentaire);    }
 
     // Récupérer les commentaires d’un post
     @GetMapping("/post/{postId}")
-    public List<Commentaire> getCommentsByPost(@PathVariable Long postId) {
-        return commentaireRepository.findByPostId(postId);
+    public List<CommentaireDTO> getCommentsByPost(@PathVariable Long postId) {
+        return commentaireService.getCommentsByPost(postId);
     }
 
 

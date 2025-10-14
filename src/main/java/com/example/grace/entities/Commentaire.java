@@ -1,14 +1,12 @@
 package com.example.grace.entities;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
+
 import java.util.Date;
 
 
@@ -29,21 +27,15 @@ public class Commentaire {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
-    @JsonManagedReference
+    @JsonIgnore
     private Post post;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false) // Lien vers l'utilisateur
-    @JsonManagedReference
+    @JsonIgnore
     private User user; // Relation avec User
 
 
-    public Commentaire(String contenuComment, Date dateComment, User user, Post post) {
-        this.contenuComment = contenuComment;
-        this.dateComment = dateComment;
-        this.user = user;
-        this.post = post;
-    }
 
     // Getters et setters
     public Long getIdComment() { return idComment; }

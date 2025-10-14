@@ -35,6 +35,12 @@ public class Post {
     @JsonIgnore
     private List<Commentaire> commentaire= new ArrayList<>(); // Ajout de la relation
 
+
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Like> like= new ArrayList<>();
+
     public Post(String contenuPost, Date datePost, User user) {
         this.contenuPost = contenuPost;
         this.datePost = datePost;
@@ -54,6 +60,20 @@ public class Post {
     public User getUser() { return user; }
     public void setUser(User user) { this.user = user; }
 
+    public List<Commentaire> getCommentaire() {
+        return commentaire;
+    }
 
+    public void setCommentaire(List<Commentaire> commentaire) {
+        this.commentaire = commentaire;
+    }
+
+    public List<Like> getLike() {
+        return like;
+    }
+
+    public void setLike(List<Like> like) {
+        this.like = like;
+    }
 
 }
